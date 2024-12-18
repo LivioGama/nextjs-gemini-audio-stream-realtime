@@ -1,0 +1,7 @@
+.firebase
+node_modules
+*.json
+*.md
+.next/*
+pnpm-lock.yaml
+out/*

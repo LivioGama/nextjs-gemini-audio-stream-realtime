@@ -1,14 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+.pnp.js
 
 # testing
 /coverage
@@ -22,20 +17,44 @@
 
 # misc
 .DS_Store
-*.pem
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
+.firebase
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+*yarn.lock
+package-lock.json
+database-debug.log
+/.eslintcache
+.next
+/out
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Sentry
+.sentryclirc
+/uploads/*
+sentry.properties
+.vercel
+.turbo
+*tsconfig.tsbuildinfo
+/playground/playground.log
+/playground/gpt.log
+.env
+*llamaIndex.json
+.idea/*
+.pnpm-debug.log
+pocketbase/pb_data
+!pocketbase/pb_data/types.d.ts
+token

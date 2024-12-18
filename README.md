@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Gemini Audio Stream Realtime 🎙️
 
-## Getting Started
+A real-time voice interface for Gemini 2.0, leveraging the [Multimodal Live API](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/multimodal-live). Built with Next.js, this project enables seamless voice, webcam, and text and screensharing interactions with Google's most advanced AI model.
 
-First, run the development server:
+![Demo](https://github.com/LivioGama/nextjs-gemini-audio-stream-realtime/blob/main/doc/screen.webp)
 
+## 🚀 Live Demo
+
+Check out the live demo [here](https://gemini-audio.liviogama.com)
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+- [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) installed and configured
+- Node.js or [Bun](https://bun.sh) runtime
+- Basic familiarity with Next.js
+
+### Setup
+
+**Clone and Install Dependencies:**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/LivioGama/nextjs-gemini-audio-stream-realtime.git
+cd nextjs-gemini-audio-stream-realtime
+bun install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚙️ Configure Environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Copy `.env.example` to `.env`:**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.example .env
+```
 
-## Learn More
+2. **Generate Google Cloud access token:**
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+bun run init-auth-token
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This command will append your Google Cloud access token to the .env file.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Set Required Environment Variables:**
 
-## Deploy on Vercel
+```bash
+NEXT_PUBLIC_PROXY_URL='ws://localhost:3000/gemini-ws'
+NEXT_PUBLIC_PROJECT_ID=<your-gcp-project-id>
+NEXT_PUBLIC_MODEL='gemini-2.0-flash-exp'
+NEXT_PUBLIC_API_HOST='us-central1-aiplatform.googleapis.com'
+NEXT_PUBLIC_GOOGLE_ACCESS_TOKEN=<automatically-set-by-init-auth-token>
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Start Development Server:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+bun run dev
+```
+
+Visit http://localhost:3000 to see the application in action!

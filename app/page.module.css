@@ -1,168 +1,336 @@
-.page {
-  --gray-rgb: 0, 0, 0;
-  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
-  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
-  align-items: center;
-  justify-items: center;
-  min-height: 100svh;
-  padding: 80px;
-  gap: 64px;
-  font-family: var(--font-geist-sans);
-}
-
-@media (prefers-color-scheme: dark) {
-  .page {
-    --gray-rgb: 255, 255, 255;
-    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-  }
-}
-
 .main {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  grid-row-start: 2;
-}
-
-.main ol {
-  font-family: var(--font-geist-mono);
-  padding-left: 0;
-  margin: 0;
-  font-size: 14px;
-  line-height: 24px;
-  letter-spacing: -0.01em;
-  list-style-position: inside;
-}
-
-.main li:not(:last-of-type) {
-  margin-bottom: 8px;
-}
-
-.main code {
-  font-family: inherit;
-  background: var(--gray-alpha-100);
-  padding: 2px 4px;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-.ctas {
-  display: flex;
-  gap: 16px;
-}
-
-.ctas a {
-  appearance: none;
-  border-radius: 128px;
-  height: 48px;
-  padding: 0 20px;
-  border: none;
-  border: 1px solid transparent;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 500;
-}
-
-a.primary {
-  background: var(--foreground);
-  color: var(--background);
-  gap: 8px;
-}
-
-a.secondary {
-  border-color: var(--gray-alpha-200);
-  min-width: 180px;
-}
-
-.footer {
-  grid-row-start: 3;
-  display: flex;
-  gap: 24px;
-}
-
-.footer a {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.footer img {
-  flex-shrink: 0;
-}
-
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-
-  .footer a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-}
-
-@media (max-width: 600px) {
-  .page {
-    padding: 32px;
-    padding-bottom: 80px;
-  }
-
-  .main {
-    align-items: center;
-  }
-
-  .main ol {
-    text-align: center;
-  }
-
-  .ctas {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: #f8f9fa;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
     flex-direction: column;
-  }
+    gap: 2rem;
+}
 
-  .ctas a {
-    font-size: 14px;
-    height: 40px;
-    padding: 0 16px;
-  }
+.logo {
+    width: 50px;
+    object-fit: contain;
+}
 
-  a.secondary {
-    min-width: auto;
-  }
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+}
 
-  .footer {
-    flex-wrap: wrap;
+.logoContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+
+.card {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    flex: 1;
+}
+
+.configHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.vstack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    flex: 1;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.hstack {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+}
+
+.configLabel {
+    font-weight: 500;
+    color: #5f6368;
+}
+
+.responseType {
+    background: #f1f3f4;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.responseTypeTitle {
+    margin: 0;
+    color: #5f6368;
+}
+
+.radioGroup {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.radioLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: #5f6368;
+}
+
+.modelState {
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.statusIndicator {
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.statusIndicator.connected {
+    background: #e6f4ea;
+    color: #137333;
+}
+
+.statusIndicator.connecting {
+    background: #fef7e0;
+    color: #ea8600;
+}
+
+.statusIndicator.disconnected {
+    background: #fce8e6;
+    color: #c5221f;
+}
+
+.statusIndicator.speaking {
+    background: #e8f0fe;
+    color: #1a73e8;
+    animation: pulse 2s infinite;
+}
+
+.inputContainer {
+    flex: 1;
+}
+
+.mediaControls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.deviceSelectors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.deviceSelect {
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+}
+
+.deviceSelect:focus {
+    border-color: #1a73e8;
+    outline: none;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+}
+
+.controlButton {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: #1a73e8;
+    color: white;
+    flex: 1;
+    display: flex;
     align-items: center;
     justify-content: center;
-  }
+    gap: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
+.controlButton:hover {
+    background: #1557b0;
+}
+
+.controlButton.active {
+    background: #34a853;
+}
+
+.connectionButtons {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.connectButton {
+    background: #34a853;
+}
+
+
+.disconnectButton {
+    background: #ea4335;
+}
+
+.preview {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: #202124;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.previewMedia {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chat {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.chatContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.messageInput {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.sendButton {
+    background: #1a73e8;
+}
+
+.messages {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.message {
+    padding: 0.8rem;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.userMessage {
+    background: #e8f0fe;
+    margin-left: 2rem;
+    align-self: flex-end;
+    max-width: 80%;
+}
+
+.modelMessage {
+    background: white;
+    margin-right: 2rem;
+    align-self: flex-start;
+    max-width: 80%;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.accordion {
+    width: 100%;
+}
+
+.accordion summary {
+    padding: 0.5rem 0;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.accordion textarea {
+    margin-top: 0.5rem;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background: #DDDDDE;
+}
+
+.note {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: #888888;
 }
