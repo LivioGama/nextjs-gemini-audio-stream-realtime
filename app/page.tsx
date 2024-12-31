@@ -6,27 +6,14 @@ import useAudioInput from '@/hooks/useAudioInput'
 import useAudioOutput from '@/hooks/useAudioOutput'
 import useChatMessages from '@/hooks/useChatMessages'
 import useMediaDevices from '@/hooks/useMediaDevices'
-import {API_HOST, isProd, MODEL, PROJECT_ID, PROXY_URL} from '@/consts'
+import {API_HOST, MODEL, PROJECT_ID, PROXY_URL} from '@/consts'
 import useVideoCapture from '@/hooks/useVideoCapture'
 import Store from '@/storage/Store'
 import isEmpty from 'lodash/isEmpty'
-import useAsyncEffect from 'use-async-effect'
-
-const getToken = async () => {
-  try {
-    // @ts-ignore
-    const tokenModule = await import('@/token')
-    return tokenModule.token
-  } catch (e) {
-    return ''
-  }
-}
 
 const Home = () => {
   const {audioSources, videoSources} = useMediaDevices()
   const {messages, textMessage, setTextMessage, addMessageToChat} = useChatMessages()
-  const [accessToken, setAccessToken] = useState<string>()
-  const [projectId, setProjectId] = useState(PROJECT_ID)
   const lastSelectedMicrophone = Store.lastSelectedMicrophone.get()
   const lastSelectedWebcam = Store.lastSelectedWebcam.get()
   const [micActive, setMicActive] = useState(false)
@@ -37,17 +24,10 @@ const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
-  useAsyncEffect(async () => {
-    setAccessToken((await getToken()) || '')
-  }, [])
-
   const {playAudioChunk} = useAudioOutput()
 
   const {connectionStatus, connect, disconnect, sendMessage, setConfig} = useGeminiLive({
-    proxyUrl: PROXY_URL,
-    projectId,
     model: MODEL,
-    apiHost: API_HOST,
     onResponse: async message => {
       if (message.type === 'AUDIO') {
         await playAudioChunk(message.data)
@@ -100,13 +80,12 @@ const Home = () => {
   })
 
   const handleConnect = () => {
-    if (!accessToken) return
     setConfig(prev => ({
       ...prev,
       responseModalities: responseModality,
       systemInstructions,
     }))
-    connect(accessToken)
+    connect()
   }
 
   const handleSendMessage = () => {
@@ -143,49 +122,6 @@ const Home = () => {
         <h2>Configuration</h2>
 
         <div className={styles.vstack}>
-          <div>
-            <div className={styles.hstack}>
-              {isProd && (
-                <div className={styles.field}>
-                  <label>Access Token</label>
-                  <input
-                    type='password'
-                    placeholder='Enter your Google Cloud access token'
-                    value={accessToken}
-                    onChange={e => setAccessToken(e.target.value)}
-                  />
-                </div>
-              )}
-
-              {isProd && (
-                <div className={styles.field}>
-                  <label>Project ID</label>
-                  <input
-                    type='text'
-                    placeholder='Your Google Cloud project ID'
-                    value={projectId}
-                    onChange={e => setProjectId(e.target.value)}
-                  />
-                </div>
-              )}
-            </div>
-            {isProd && (
-              <>
-                <p className={styles.note}>
-                  If you don't have an Access Token and/or a project ID, you can get one{' '}
-                  <a
-                    href='https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal'
-                    target='_blank'
-                    rel='noreferrer'>
-                    here
-                  </a>
-                  .
-                </p>
-                <div className={styles.divider} />
-              </>
-            )}
-          </div>
-
           <div className={styles.responseType}>
             <h3>Response Format</h3>
             <div className={styles.radioGroup}>
@@ -236,7 +172,9 @@ const Home = () => {
             <button
               className={styles.connectButton}
               onClick={handleConnect}
-              disabled={isEmpty(projectId) || isEmpty(accessToken)}>
+              disabled={
+                isEmpty(PROJECT_ID) || isEmpty(MODEL) || isEmpty(API_HOST) || isEmpty(PROXY_URL)
+              }>
               Connect to Gemini
             </button>
           )}

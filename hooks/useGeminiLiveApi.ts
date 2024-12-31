@@ -1,17 +1,12 @@
 import {useCallback, useState} from 'react'
 import {GeminiLiveResponseMessage, GeminiWebSocketMessage, ModalityResponse} from '@/types'
+import {API_HOST, PROJECT_ID, PROXY_URL} from '@/consts'
 
 const useGeminiLive = ({
-  proxyUrl,
-  projectId,
   model,
-  apiHost,
   onResponse,
 }: {
-  proxyUrl: string
-  projectId: string
   model: string
-  apiHost: string
   onResponse: (message: GeminiLiveResponseMessage) => void
 }) => {
   const [webSocket, setWebSocket] = useState<WebSocket | null>(null)
@@ -19,28 +14,35 @@ const useGeminiLive = ({
   const [config, setConfig] = useState({
     responseModalities: 'AUDIO' as ModalityResponse,
     systemInstructions: '',
-    accessToken: '',
   })
 
-  const connect = useCallback(
-    (accessToken: string) => {
-      if (webSocket?.readyState === WebSocket.OPEN) return
+  const getAccessToken = async () => {
+    const response = await fetch('/api/get-token')
+    const data = await response.json()
+    if (!response.ok) throw new Error(data.error)
+    return data.token
+  }
 
-      const ws = new WebSocket(proxyUrl)
+  const connect = useCallback(async () => {
+    if (webSocket?.readyState === WebSocket.OPEN) return
+
+    try {
+      const accessToken = await getAccessToken()
+
+      const ws = new WebSocket(PROXY_URL)
       setWebSocket(ws)
-      setConfig(prev => ({...prev, accessToken}))
 
       ws.onopen = () => {
         setConnectionStatus(WebSocket.OPEN)
         const serviceSetupMessage = {
           bearer_token: accessToken,
-          service_url: `wss://${apiHost}/ws/google.cloud.aiplatform.v1beta1.LlmBidiService/BidiGenerateContent`,
+          service_url: `wss://${API_HOST}/ws/google.cloud.aiplatform.v1beta1.LlmBidiService/BidiGenerateContent`,
         }
         ws.send(JSON.stringify(serviceSetupMessage))
 
         const sessionSetupMessage = {
           setup: {
-            model: `projects/${projectId}/locations/us-central1/publishers/google/models/${model}`,
+            model: `projects/${PROJECT_ID}/locations/us-central1/publishers/google/models/${model}`,
             generation_config: {response_modalities: config.responseModalities},
             system_instruction: {parts: [{text: config.systemInstructions}]},
           },
@@ -50,7 +52,7 @@ const useGeminiLive = ({
       ws.onclose = event => {
         setConnectionStatus(WebSocket.CLOSED)
         if (event.code === 1008) {
-          console.error('Token expired, run `init-auth-token` to refresh it and restart the app')
+          console.error('Token expired or invalid')
         }
       }
       ws.onerror = () => setConnectionStatus(WebSocket.CLOSED)
@@ -59,9 +61,11 @@ const useGeminiLive = ({
         const messageData = JSON.parse(event.data)
         onResponse(new GeminiLiveResponseMessage(messageData))
       }
-    },
-    [proxyUrl, config.responseModalities, config.systemInstructions],
-  )
+    } catch (error) {
+      console.error('Failed to connect:', error)
+      setConnectionStatus(WebSocket.CLOSED)
+    }
+  }, [config.responseModalities, config.systemInstructions])
 
   const disconnect = useCallback(() => {
     webSocket?.close()
