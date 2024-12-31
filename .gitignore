@@ -59,3 +59,4 @@ pocketbase/pb_data
 !pocketbase/pb_data/types.d.ts
 token
 account-service.json
+server_output.log

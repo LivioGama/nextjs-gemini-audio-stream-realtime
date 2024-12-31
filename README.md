@@ -79,11 +79,14 @@ Visit http://localhost:3000 to see the application in action!
 
 This project is still in development. Known issues:
 
-- The camera devices are not detected on my MacBook although there is a ghost camera without name
-- The Text Response is not tested and I do not think it's working, I focused more on the audio live speech and the
-  screensharing at the moment.
-- The System Instructions are not tested.
+- The camera devices work only on a HTTPS deployed version.
+- Cannot switch to Text Response without reconnecting.
 - The quota and limit are insanely quickly exceeded, you might have to take some 10 minutes break while using.
+- The websocket deployed on Vercel does not seem to work. It does when deployed to a custom VPS though.
+- To check your deployed websocket, you can use a tool like [wscat](https://github.com/websockets/wscat) by running:
+```bash
+wscat -c wss://gemini-ws.liviogama.com/gemini-ws
+```
 
 ## 🤝 Contributing
 

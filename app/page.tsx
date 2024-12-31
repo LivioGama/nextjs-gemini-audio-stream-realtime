@@ -232,8 +232,7 @@ const Home = () => {
                 onClick={() => {
                   setCameraActive(!cameraActive)
                   setScreenShareActive(false)
-                }}
-                disabled={!lastSelectedWebcam}>
+                }}>
                 {cameraActive ? '📹 Camera On' : '📹 Start Camera'}
               </button>
               <button
