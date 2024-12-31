@@ -26,7 +26,7 @@ const Home = () => {
 
   const {playAudioChunk} = useAudioOutput()
 
-  const {connectionStatus, connect, disconnect, sendMessage, setConfig} = useGeminiLive({
+  const {connectionStatus, connect, disconnect, sendMessage} = useGeminiLive({
     model: MODEL,
     onResponse: async message => {
       if (message.type === 'AUDIO') {
@@ -80,12 +80,7 @@ const Home = () => {
   })
 
   const handleConnect = () => {
-    setConfig(prev => ({
-      ...prev,
-      responseModalities: responseModality,
-      systemInstructions,
-    }))
-    connect()
+    connect({responseModalities: responseModality, systemInstructions})
   }
 
   const handleSendMessage = () => {

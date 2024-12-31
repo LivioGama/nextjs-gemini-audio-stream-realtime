@@ -1,5 +1,5 @@
 import {useCallback, useState} from 'react'
-import {GeminiLiveResponseMessage, GeminiWebSocketMessage, ModalityResponse} from '@/types'
+import {GeminiLiveResponseMessage, GeminiWebSocketMessage} from '@/types'
 import {API_HOST, PROJECT_ID, PROXY_URL} from '@/consts'
 
 const useGeminiLive = ({
@@ -11,10 +11,6 @@ const useGeminiLive = ({
 }) => {
   const [webSocket, setWebSocket] = useState<WebSocket | null>(null)
   const [connectionStatus, setConnectionStatus] = useState<number>(WebSocket.CLOSED)
-  const [config, setConfig] = useState({
-    responseModalities: 'AUDIO' as ModalityResponse,
-    systemInstructions: '',
-  })
 
   const getAccessToken = async () => {
     const response = await fetch('/api/get-token')
@@ -23,7 +19,7 @@ const useGeminiLive = ({
     return data.token
   }
 
-  const connect = useCallback(async () => {
+  const connect = useCallback(async config => {
     if (webSocket?.readyState === WebSocket.OPEN) return
 
     try {
@@ -55,9 +51,12 @@ const useGeminiLive = ({
           console.error('Token expired or invalid')
         }
       }
-      ws.onerror = () => setConnectionStatus(WebSocket.CLOSED)
+      ws.onerror = error => {
+        console.error('WebSocket error:', error)
+        setConnectionStatus(WebSocket.CLOSED)
+      }
       ws.onmessage = event => {
-        console.log('Message received: ', event)
+        // console.log('Message received: ', event)
         const messageData = JSON.parse(event.data)
         onResponse(new GeminiLiveResponseMessage(messageData))
       }
@@ -65,7 +64,7 @@ const useGeminiLive = ({
       console.error('Failed to connect:', error)
       setConnectionStatus(WebSocket.CLOSED)
     }
-  }, [config.responseModalities, config.systemInstructions])
+  }, [])
 
   const disconnect = useCallback(() => {
     webSocket?.close()
@@ -87,7 +86,6 @@ const useGeminiLive = ({
     connect,
     disconnect,
     sendMessage,
-    setConfig,
   }
 }
 
